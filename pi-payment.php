@@ -1,3 +1,4 @@
+
 <?php
 /*
 Plugin Name: WooCommerce Pi Network Gateway
@@ -9,6 +10,9 @@ Author: Moaaz
 if (!defined('ABSPATH')) exit; // حماية من الوصول المباشر
 
 add_action('plugins_loaded', 'init_pi_payment_gateway');
+
+
+
 
 function load_pi_payment_scripts() {
     if (is_checkout()) {
@@ -84,8 +88,8 @@ public function payment_fields() {
     // رسالة تحذيرية قابلة للطي
     echo '<div class="warning-toggle">';
     echo '<div class="warning-header">';
-    echo '<span class="warning-icon">⚠️</span>'; // علامة تعجب
-    echo '<span class="warning-title">تنبيه هام</span>'; // عنوان التنبيه
+    echo '<span class="warning-icon">✅</span>'; // علامة تعجب
+    echo '<span class="warning-title">   تعليمات للدفع </span>'; // عنوان التنبيه
     echo '<span class="arrow">▼</span>'; // سهم للطي
     echo '</div>';
     echo '<div class="warning-content">';
