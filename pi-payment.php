@@ -1,4 +1,3 @@
-
 <?php
 /*
 Plugin Name: WooCommerce Pi Network Gateway
@@ -9,9 +8,24 @@ Author: Moaaz
 
 if (!defined('ABSPATH')) exit; // حماية من الوصول المباشر
 
+// تسجيل عملة Pi Network في WooCommerce
+add_filter('woocommerce_currencies', 'register_pi_currency');
+function register_pi_currency($currencies) {
+    $currencies['Pi'] = __('Pi Network', 'woocommerce');
+    return $currencies;
+}
+
+// تحديد رمز عملة Pi Network
+add_filter('woocommerce_currency_symbol', 'add_pi_currency_symbol', 10, 2);
+function add_pi_currency_symbol($currency_symbol, $currency) {
+    if ($currency === 'Pi') {
+        $currency_symbol = 'Pi';
+    }
+    return $currency_symbol;
+}
+
+
 add_action('plugins_loaded', 'init_pi_payment_gateway');
-
-
 
 
 function load_pi_payment_scripts() {
