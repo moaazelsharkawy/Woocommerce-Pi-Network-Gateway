@@ -53,8 +53,9 @@ label[for="pi_transaction_hash"] {
 }
 
 .pi-payment-item button:hover {
-    background-color: #5a32a3; /* لون أرجواني داكن عند التمرير */
-    transform: translateY(-2px);
+    background-color: #b09c21; /* لون أرجواني داكن عند التمرير */
+    transform: translateY(2px);
+color: white;
 }
 
 .pi-payment-item button:active {
@@ -151,9 +152,9 @@ transform: translateX(-20px);
 /* تنسيقات الرسالة التحذيرية */
 .warning-toggle {
     margin-bottom: 20px;
-    border: 1px solid #ffcc00; /* لون حدود تحذيري */
+    border: 1px solid #4CAF50; /* لون حدود يدل على الأمان */
     border-radius: 8px;
-    background-color: #fff3cd; /* لون خلفية تحذيري */
+    background-color: #E8F5E9; /* لون خلفية تدل على الأمان */
     overflow: hidden;
 }
 
@@ -163,17 +164,18 @@ transform: translateX(-20px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #ffeeba; /* لون خلفية العنوان */
+    background-color: #C8E6C9; /* لون خلفية العنوان يدل على الأمان */
 }
 
 .warning-icon {
     font-size: 1.2em;
-    margin-right: 10px;
+    margin-right: 5px;
+    color: #388E3C; /* لون الأيقونة يدل على الأمان */
 }
 
 .warning-title {
     font-weight: bold;
-    color: #856404; /* لون نص تحذيري */
+    color: #2E7D32; /* لون النص يدل على الأمان */
 }
 
 .arrow {
@@ -184,10 +186,10 @@ transform: translateX(-20px);
 .warning-content {
     padding: 10px;
     display: none; /* يتم إخفاء المحتوى افتراضيًا */
-    border-top: 1px solid #ffcc00; /* لون حدود تحذيري */
+    border-top: 1px solid #4CAF50; /* لون حدود يدل على الأمان */
 }
 
 .warning-content p {
     margin: 0;
-    color: #856404; /* لون نص تحذيري */
+    color: #2E7D32; /* لون النص يدل على الأمان */
 }
