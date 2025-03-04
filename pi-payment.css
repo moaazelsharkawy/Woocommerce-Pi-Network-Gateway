@@ -1,0 +1,193 @@
+/* تنسيقات عامة للبوابة */
+.pi-payment-container {
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* تنسيق نص "أدخل هاش المعاملة" */
+label[for="pi_transaction_hash"] {
+    color: #6f42c1; /* لون أرجواني */
+    font-weight: bold; /* جعل النص bold (اختياري) */
+}
+
+.pi-payment-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.pi-payment-item:hover {
+    background-color: #e9ecef;
+}
+
+.pi-payment-item p {
+    font-size: 1.1em;
+    color: #333;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+}
+
+/* تنسيق عنوان البوابة */
+.woocommerce-checkout .payment_method_pi_payment > label {
+    font-weight: bold; /* جعل النص bold */
+    color: #6f42c1; /* لون أرجواني (اختياري) */
+}
+
+.pi-payment-item button {
+    background-color: #6f42c1; /* لون أرجواني رئيسي */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pi-payment-item button:hover {
+    background-color: #5a32a3; /* لون أرجواني داكن عند التمرير */
+    transform: translateY(-2px);
+}
+
+.pi-payment-item button:active {
+    transform: translateY(0);
+}
+
+/* تنسيقات للأجهزة الصغيرة */
+@media (max-width: 600px) {
+    .pi-payment-container {
+        padding: 15px;
+    }
+
+    .pi-payment-item {
+        padding: 10px;
+    }
+
+    .pi-payment-item button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* تنسيقات إضافية للعناصر التفاعلية */
+/* تنسيقات علامة الاستفهام والنص القابل للنقر */
+.tooltip-container {
+    display: flex; /* لجعل العناصر في نفس السطر */
+    align-items: center; /* توسيط العناصر عموديًا */
+    margin-top: 15px;
+}
+
+.tooltip-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #6f42c1; /* لون أرجواني */
+    background-color: rgba(111, 66, 193, 0.1); /* خلفية شبه شفافة */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* مسافة بين علامة الاستفهام والنص */
+}
+
+.tooltip-icon:hover {
+    background-color: rgba(111, 66, 193, 0.2); /* تغيير لون الخلفية عند التمرير */
+}
+
+.tooltip-text {
+    visibility: hidden;
+    background-color: #6f42c1; /* لون أرجواني */
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* يحدد مكان ظهور التلميح */
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 0.9em;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.help-text {
+    color: blue; /* لون أزرق */
+    text-decoration: underline; /* نص تحته خط */
+    cursor: pointer;
+    font-weight: bold; /* جعل النص bold */
+    transition: color 0.3s ease;
+    margin-left: 10px; /* مسافة بين علامة الاستفهام والنص */
+transform: translateX(-20px);
+    
+}
+
+
+.help-text:hover {
+    color: #0056b3; /* لون أزرق داكن عند التمرير */
+}
+
+/* جعل اسم بوابة الدفع bold */
+.pi-payment-container .pi-payment-item p strong {
+    font-weight: bold;
+}
+
+/* تنسيقات الرسالة التحذيرية */
+.warning-toggle {
+    margin-bottom: 20px;
+    border: 1px solid #ffcc00; /* لون حدود تحذيري */
+    border-radius: 8px;
+    background-color: #fff3cd; /* لون خلفية تحذيري */
+    overflow: hidden;
+}
+
+.warning-header {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffeeba; /* لون خلفية العنوان */
+}
+
+.warning-icon {
+    font-size: 1.2em;
+    margin-right: 10px;
+}
+
+.warning-title {
+    font-weight: bold;
+    color: #856404; /* لون نص تحذيري */
+}
+
+.arrow {
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+}
+
+.warning-content {
+    padding: 10px;
+    display: none; /* يتم إخفاء المحتوى افتراضيًا */
+    border-top: 1px solid #ffcc00; /* لون حدود تحذيري */
+}
+
+.warning-content p {
+    margin: 0;
+    color: #856404; /* لون نص تحذيري */
+}
