@@ -1,4 +1,3 @@
-
 <?php
 /*
 Plugin Name: WooCommerce Pi Network Gateway
@@ -417,15 +416,15 @@ if (abs($actual_amount - $expected_amount) > $allowed_variance) {
 
 
         private function validate_transaction($transaction_data, $transaction_hash, $order) {
-            $expected_address = $this->get_option('pi_address');
-            $expected_amount = floatval($order->get_total());
+    $expected_address = $this->get_option('pi_address');
+    $expected_amount = floatval($order->get_total());
 
-            return isset($transaction_data['hash'], $transaction_data['destination'], $transaction_data['amount'], $transaction_data['status']) &&
-                   $transaction_data['hash'] === $transaction_hash &&
-                   $transaction_data['destination'] === $expected_address &&
-                   floatval($transaction_data['amount']) === $expected_amount &&
-                   $transaction_data['status'] === 'successful';
-        }
+    return isset($transaction_data['hash'], $transaction_data['to'], $transaction_data['amount'], $transaction_data['status']) &&
+           $transaction_data['hash'] === $transaction_hash &&
+           $transaction_data['to'] === $expected_address &&
+           floatval($transaction_data['amount']) === $expected_amount &&
+           $transaction_data['status'] === 'successful';
+}
     }
 }
 
