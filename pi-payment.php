@@ -120,7 +120,12 @@ function init_pi_payment_gateway() {
 public function payment_fields() {
     echo '<div class="pi-payment-container">';
     
-echo '<button type="button" id="pi-instructions-btn" class="pi-instructions-btn">📜 تعليمات للدفع </button>';
+    
+echo '<button type="button" id="pi-instructions-btn" class="pi-instructions-btn">
+        <img src="' . plugins_url('assets/salla-shop-pi.jpg', __FILE__) . '" alt="تعليمات الدفع">
+        تعليمات للدفع
+      </button>';
+
 
     
 // عرض قيمة الدفع للنسخ (نسخ الرقم فقط)
