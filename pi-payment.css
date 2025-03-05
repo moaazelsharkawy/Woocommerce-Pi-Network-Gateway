@@ -1,4 +1,3 @@
-/* تنسيقات عامة للبوابة */
 .pi-payment-container {
     padding: 25px;
     border: 1px solid #e0e0e0;
@@ -9,10 +8,9 @@
     margin: 0 auto;
 }
 
-/* تنسيق نص "أدخل هاش المعاملة" */
 label[for="pi_transaction_hash"] {
-    color: #6f42c1; /* لون أرجواني */
-    font-weight: bold; /* جعل النص bold (اختياري) */
+    color: #6f42c1;
+    font-weight: bold;
 }
 
 .pi-payment-item {
@@ -34,14 +32,13 @@ label[for="pi_transaction_hash"] {
     font-weight: 500;
 }
 
-/* تنسيق عنوان البوابة */
 .woocommerce-checkout .payment_method_pi_payment > label {
-    font-weight: bold; /* جعل النص bold */
-    color: #6f42c1; /* لون أرجواني (اختياري) */
+    font-weight: bold;
+    color: #6f42c1;
 }
 
 .pi-payment-item button {
-    background-color: #6f42c1; /* لون أرجواني رئيسي */
+    background-color: #6f42c1;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -53,16 +50,15 @@ label[for="pi_transaction_hash"] {
 }
 
 .pi-payment-item button:hover {
-    background-color: #b09c21; /* لون أرجواني داكن عند التمرير */
+    background-color: #b09c21;
     transform: translateY(2px);
-color: white;
+    color: white;
 }
 
 .pi-payment-item button:active {
     transform: translateY(0);
 }
 
-/* تنسيقات للأجهزة الصغيرة */
 @media (max-width: 600px) {
     .pi-payment-container {
         padding: 15px;
@@ -78,19 +74,17 @@ color: white;
     }
 }
 
-/* تنسيقات إضافية للعناصر التفاعلية */
-/* تنسيقات علامة الاستفهام والنص القابل للنقر */
 .tooltip-container {
-    display: flex; /* لجعل العناصر في نفس السطر */
-    align-items: center; /* توسيط العناصر عموديًا */
+    display: flex;
+    align-items: center;
     margin-top: 15px;
 }
 
 .tooltip-icon {
     font-size: 1.5em;
     cursor: pointer;
-    color: #6f42c1; /* لون أرجواني */
-    background-color: rgba(111, 66, 193, 0.1); /* خلفية شبه شفافة */
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.1);
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -99,23 +93,23 @@ color: white;
     align-items: center;
     text-align: center;
     transition: background-color 0.3s ease;
-    margin-right: 10px; /* مسافة بين علامة الاستفهام والنص */
+    margin-right: 10px;
 }
 
 .tooltip-icon:hover {
-    background-color: rgba(111, 66, 193, 0.2); /* تغيير لون الخلفية عند التمرير */
+    background-color: rgba(111, 66, 193, 0.2);
 }
 
 .tooltip-text {
     visibility: hidden;
-    background-color: #6f42c1; /* لون أرجواني */
+    background-color: #6f42c1;
     color: #fff;
     text-align: center;
     border-radius: 6px;
     padding: 8px 12px;
     position: absolute;
     z-index: 1;
-    bottom: 125%; /* يحدد مكان ظهور التلميح */
+    bottom: 125%;
     left: 50%;
     margin-left: -60px;
     opacity: 0;
@@ -129,32 +123,28 @@ color: white;
 }
 
 .help-text {
-    color: blue; /* لون أزرق */
-    text-decoration: underline; /* نص تحته خط */
+    color: blue;
+    text-decoration: underline;
     cursor: pointer;
-    font-weight: bold; /* جعل النص bold */
+    font-weight: bold;
     transition: color 0.3s ease;
-    margin-left: 10px; /* مسافة بين علامة الاستفهام والنص */
-transform: translateX(-20px);
-    
+    margin-left: 10px;
+    transform: translateX(-20px);
 }
-
 
 .help-text:hover {
-    color: #0056b3; /* لون أزرق داكن عند التمرير */
+    color: #0056b3;
 }
 
-/* جعل اسم بوابة الدفع bold */
 .pi-payment-container .pi-payment-item p strong {
     font-weight: bold;
 }
 
-/* تنسيقات الرسالة التحذيرية */
 .warning-toggle {
     margin-bottom: 20px;
-    border: 1px solid #4CAF50; /* لون حدود يدل على الأمان */
+    border: 1px solid #4CAF50;
     border-radius: 8px;
-    background-color: #E8F5E9; /* لون خلفية تدل على الأمان */
+    background-color: #E8F5E9;
     overflow: hidden;
 }
 
@@ -164,18 +154,18 @@ transform: translateX(-20px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #C8E6C9; /* لون خلفية العنوان يدل على الأمان */
+    background-color: #C8E6C9;
 }
 
 .warning-icon {
     font-size: 1.2em;
     margin-right: 5px;
-    color: #388E3C; /* لون الأيقونة يدل على الأمان */
+    color: #388E3C;
 }
 
 .warning-title {
     font-weight: bold;
-    color: #2E7D32; /* لون النص يدل على الأمان */
+    color: #2E7D32;
 }
 
 .arrow {
@@ -185,11 +175,25 @@ transform: translateX(-20px);
 
 .warning-content {
     padding: 10px;
-    display: none; /* يتم إخفاء المحتوى افتراضيًا */
-    border-top: 1px solid #4CAF50; /* لون حدود يدل على الأمان */
+    display: none;
+    border-top: 1px solid #4CAF50;
 }
 
 .warning-content p {
     margin: 0;
-    color: #2E7D32; /* لون النص يدل على الأمان */
+    color: #2E7D32;
+}
+
+@media (min-width: 601px) {
+    .pi-payment-item button {
+        width: 100%;
+    }
+
+    .pi-payment-container input#pi_transaction_hash {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
 }
