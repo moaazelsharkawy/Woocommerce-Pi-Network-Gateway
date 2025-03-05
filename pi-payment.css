@@ -47,6 +47,7 @@ label[for="pi_transaction_hash"] {
     font-size: 1em;
     font-weight: 500;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
 }
 
 .pi-payment-item button:hover {
@@ -74,54 +75,8 @@ label[for="pi_transaction_hash"] {
     }
 }
 
-.tooltip-container {
-    display: flex;
-    align-items: center;
-    margin-top: 15px;
-}
 
-.tooltip-icon {
-    font-size: 1.5em;
-    cursor: pointer;
-    color: #6f42c1;
-    background-color: rgba(111, 66, 193, 0.1);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-}
-
-.tooltip-icon:hover {
-    background-color: rgba(111, 66, 193, 0.2);
-}
-
-.tooltip-text {
-    visibility: hidden;
-    background-color: #6f42c1;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 12px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    font-size: 0.9em;
-}
-
-.tooltip-container:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-}
-
+/* تعديل نص المساعدة */
 .help-text {
     color: blue;
     text-decoration: underline;
@@ -129,66 +84,22 @@ label[for="pi_transaction_hash"] {
     font-weight: bold;
     transition: color 0.3s ease;
     margin-left: 10px;
-    transform: translateX(-20px);
+    display: block;
+    margin-top: 15px; /* هبوط النص قليلاً لأسفل */
 }
 
 .help-text:hover {
     color: #0056b3;
 }
 
+/* تحسين مظهر الحاوية */
 .pi-payment-container .pi-payment-item p strong {
     font-weight: bold;
 }
 
-.warning-toggle {
-    margin-bottom: 20px;
-    border: 1px solid #4CAF50;
-    border-radius: 8px;
-    background-color: #E8F5E9;
-    overflow: hidden;
-}
 
-.warning-header {
-    padding: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #C8E6C9;
-}
-
-.warning-icon {
-    font-size: 1.2em;
-    margin-right: 5px;
-    color: #388E3C;
-}
-
-.warning-title {
-    font-weight: bold;
-    color: #2E7D32;
-}
-
-.arrow {
-    font-size: 1.2em;
-    transition: transform 0.3s ease;
-}
-
-.warning-content {
-    padding: 10px;
-    display: none;
-    border-top: 1px solid #4CAF50;
-}
-
-.warning-content p {
-    margin: 0;
-    color: #2E7D32;
-}
 
 @media (min-width: 601px) {
-    .pi-payment-item button {
-        width: 100%;
-    }
-
     .pi-payment-container input#pi_transaction_hash {
         width: 100%;
         padding: 12px;
@@ -196,4 +107,130 @@ label[for="pi_transaction_hash"] {
         border-radius: 6px;
         border: 1px solid #ccc;
     }
+}
+
+
+
+/* تحسين مظهر قسم "انظر كيف يتم الدفع" */
+.payment-help {
+    margin-top: 5px; /* زيادة المسافة عن الأيقونات */
+    font-weight: bold;
+    display: block;
+}
+
+.tooltip-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* مسافة بين الأيقونات */
+    position: relative;
+}
+
+.tooltip-icon {
+    font-size: 25px;
+    color: #007bff;
+    cursor: pointer;
+margin-top: 5px;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out;
+    font-size: 14px;
+}
+
+.github-link {
+    text-decoration: none;
+}
+
+.github-icon {
+    font-size: 24px;
+    color: #333;
+    transition: color 0.3s ease-in-out, transform 0.2s;
+margin-top: 5px;
+    
+}
+
+.github-icon:hover {
+    color: #000;
+    transform: scale(1.2);
+}
+
+  
+
+#pi-instructions-btn {
+    background-color: transparent;
+    color: #6f42c1;
+    font-size: 13px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* توسيط المحتوى أفقيًا */
+    text-align: center; /* لضمان توسيط النص */
+    transition: color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: -5px;
+    width: 100%; /* تأكد أن الزر يأخذ عرضًا كافيًا */
+}
+
+
+
+#pi-instructions-btn:hover {
+    color: #b09c21;
+    transform: scale(1.1);
+}
+
+
+.pi-instructions-popup {
+    max-width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.pi-instructions-popup .swal2-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+}
+
+.pi-instructions-popup .swal2-html-container {
+    text-align: right;
+    font-size: 1em;
+    color: #333;
+    line-height: 1.6;
+}
+
+.pi-instructions-popup .swal2-confirm {
+    background-color: #6f42c1;
+    color: white;
+    font-size: 1em;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+.pi-instructions-popup .swal2-close {
+    font-size: 20px;
+    color: #333;
+    top: 10px;
+    right: 10px;
 }
