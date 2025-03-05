@@ -32,6 +32,17 @@ function add_pi_currency_symbol($currency_symbol, $currency) {
     return $currency_symbol;
 }
 
+function enqueue_font_awesome() {
+    if (is_checkout() || is_cart()) { // تحميلها فقط في صفحة الدفع أو السلة
+        if (!wp_style_is('font-awesome', 'enqueued')) { // التحقق من عدم تحميلها مسبقًا
+            wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', array(), '6.0.0');
+        }
+    }
+}
+
+add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
+
+add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
 
 add_action('plugins_loaded', 'init_pi_payment_gateway');
@@ -110,17 +121,8 @@ function init_pi_payment_gateway() {
 public function payment_fields() {
     echo '<div class="pi-payment-container">';
     
-    // رسالة تحذيرية قابلة للطي
-    echo '<div class="warning-toggle">';
-    echo '<div class="warning-header">';
-    echo '<span class="warning-icon">✅</span>'; // علامة تعجب
-    echo '<span class="warning-title">   تعليمات للدفع </span>'; // عنوان التنبيه
-    echo '<span class="arrow">▼</span>'; // سهم للطي
-    echo '</div>';
-    echo '<div class="warning-content">';
-    echo '<p><strong>' . esc_html($this->description) . '</strong></p>'; // المحتوى
-    echo '</div>';
-    echo '</div>';
+echo '<button type="button" id="pi-instructions-btn" class="pi-instructions-btn">📜 تعليمات للدفع </button>';
+
     
 // عرض قيمة الدفع للنسخ (نسخ الرقم فقط)
 $total = strip_tags(WC()->cart->get_total()); 
@@ -131,7 +133,7 @@ echo '</div>';
 
 // إخفاء العنوان مع جعله قابلاً للنسخ (نسخ النص الكامل)
 echo '<div class="pi-payment-item">';
-echo '<p><strong>عنوان الدفع: <span id="pi-payment-address" style="display:none;">' . esc_html($this->pi_address) . '</span></strong>';
+echo '<p><strong>عنوان المول: <span id="pi-payment-address" style="display:none;">' . esc_html($this->pi_address) . '</span></strong>';
 echo ' <button type="button" class="copy-btn" data-copy-target="pi-payment-address">نسخ العنوان</button></p>';
 echo '</div>';
 
@@ -139,12 +141,23 @@ echo '</div>';
 echo '<input type="text" id="pi_transaction_hash" name="pi_transaction_hash" class="input-text" required />';
 echo '</div>';
 
-// إضافة علامة استفهام مع النص القابل للنقر
+
+// تعديل عرض علامة الاستفهام وأيقونة GitHub
 echo '<div class="tooltip-container">';
-echo '<span class="tooltip-icon">؟</span>';
-echo '<span class="help-text" id="video-help">انظر كيف يتم الدفع</span>';
-echo '<span class="tooltip-text">هذه البوابة مطورة من Salla Developer</span>';
+echo '<i class="fas fa-question-circle tooltip-icon"></i>'; // علامة الاستفهام 
+
+// أيقونة GitHub مع الرابط
+echo '<a href="https://github.com/moaazelsharkawy/Woocommerce-Pi-Network-Gateway" target="_blank" class="github-link">';
+echo '<i class="fab fa-github github-icon"></i>'; // أيقونة GitHub من Font Awesome
+echo '</a>';
 echo '</div>';
+
+
+// وضع "انظر كيف يتم الدفع" في سطر منفصل
+echo '<div class="payment-help">';
+echo '<span class="help-text" id="video-help">انظر كيف يتم الدفع</span>';
+echo '</div>';
+
     // تضمين السكربت مباشرة في الـ payment fields
     ?>
    
@@ -196,19 +209,47 @@ echo '</div>';
             }
         });
 
-  // JavaScript للطي والفك
-        document.querySelector('.warning-header').addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            const arrow = this.querySelector('.arrow');
-            if (content.style.display === 'none' || content.style.display === '') {
-                content.style.display = 'block';
-                arrow.textContent = '▲'; // تغيير السهم لأعلى
-            } else {
-                content.style.display = 'none';
-                arrow.textContent = '▼'; // تغيير السهم لأسفل
-            }
-        });
 
+    $('#pi-instructions-btn').on('click', function() {
+    let instructionsText = `<?php echo esc_js($this->description); ?>`; // جلب النص من الإعدادات
+
+    // تقسيم النص إلى أسطر وتحويله إلى قائمة مرتبة
+    let instructionsArray = instructionsText.split("\n"); // تقسيم النص إلى أسطر
+    let orderedList = "<ol style='text-align:right; direction:rtl; font-size:1em; line-height:1.6;'>";
+    
+    instructionsArray.forEach(line => {
+        if (line.trim() !== "") { // تجاهل الأسطر الفارغة
+            orderedList += `<li>${line.trim()}</li>`;
+        }
+    });
+
+    orderedList += "</ol>";
+
+    Swal.fire({
+        title: "تعليمات سريعة للدفع",
+        html: orderedList,
+        icon: "info",
+        confirmButtonText: "تم",
+        width: 320,
+        heightAuto: false,
+        customClass: {
+            popup: 'pi-instructions-popup'
+        }
+    });
+});
+
+
+
+
+// عند الضغط على علامة الاستفهام، أظهر النص المخفي
+        $('.tooltip-icon').on('click', function() {
+    Swal.fire({
+        title: 'معلومات عن البوابة',
+        text: 'هذه البوابة آمنة وسهلة، مطورة من Salla Developer، الإصدار V1.2، ومتصلة بـ Pi Blockchain API.',
+        icon: 'info',
+        confirmButtonText: 'إغلاق'
+    });
+});
 
         // عند الضغط على النص "انظر كيف يتم الدفع"
         $('#video-help').on('click', function() {
@@ -397,7 +438,9 @@ add_filter('woocommerce_payment_gateways', 'add_pi_gateway_class');
 function display_pi_transaction_hash_in_admin_order($order) {
     $transaction_hash = $order->get_meta('_pi_transaction_hash', true);
     if ($transaction_hash) {
-        echo '<p><strong>' . __('Pi Transaction Hash', 'text-domain') . ':</strong> ' . esc_html($transaction_hash) . '</p>';
+        $split_hash = wordwrap($transaction_hash, 32, "<br>", true);
+echo '<p><strong>' . __('Pi Transaction Hash', 'text-domain') . ':</strong> <span id="pi_transaction_hash_display">' . $split_hash . '</span></p>';
+
     } else {
         echo '<p><strong>' . __('Pi Transaction Hash', 'text-domain') . ':</strong> لا يوجد هاش</p>';
     }
