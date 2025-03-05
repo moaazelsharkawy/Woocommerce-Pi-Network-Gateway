@@ -175,26 +175,30 @@ margin-top: 5px;
 #pi-instructions-btn {
     background-color: transparent;
     color: #6f42c1;
-    font-size: 13px;
-    padding: 10px 20px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center; /* توسيط المحتوى أفقيًا */
-    text-align: center; /* لضمان توسيط النص */
+    gap: 5px;
+    text-align: left;
     transition: color 0.3s ease, transform 0.2s ease;
     font-weight: bold;
     margin-bottom: 5px;
     margin-top: -5px;
-    width: 100%; /* تأكد أن الزر يأخذ عرضًا كافيًا */
+    width: auto; 
+    white-space: nowrap;
 }
-
-
 
 #pi-instructions-btn:hover {
     color: #b09c21;
     transform: scale(1.1);
+}
+
+.pi-instructions-btn img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
 }
 
 
