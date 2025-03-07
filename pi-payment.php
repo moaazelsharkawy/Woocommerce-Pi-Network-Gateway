@@ -41,14 +41,8 @@ function enqueue_font_awesome() {
 
 add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
-add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
-
 
 add_action('plugins_loaded', 'init_pi_payment_gateway');
-
-
-
-
 function load_pi_payment_scripts() {
     if (is_checkout()) {
         error_log('تحميل ملفات Pi Payment...'); // سجل رسالة للتحقق
