@@ -1,9 +1,10 @@
+
 <?php
 /*
 Plugin Name: WooCommerce Pi Network Gateway
 Plugin URI: https://salla-shop.com
 Description: بوابة دفع Pi Network لمتجر WooCommerce
-Version: 1.3
+Version: 1.4
 Author: Moaaz
 Author URI: https://salla-shop.com
 License: GPL-2.0+
@@ -118,7 +119,6 @@ function init_pi_payment_gateway() {
 public function payment_fields() {
     echo '<div class="pi-payment-container">';
     
-    
 echo '<button type="button" id="pi-instructions-btn" class="pi-instructions-btn">
         <img src="' . plugins_url('assets/salla-shop-pi.jpg', __FILE__) . '" alt="تعليمات الدفع">
         تعليمات للدفع
@@ -127,21 +127,38 @@ echo '<button type="button" id="pi-instructions-btn" class="pi-instructions-btn"
 
     
 // عرض قيمة الدفع للنسخ (نسخ الرقم فقط)
+ 
 $total = strip_tags(WC()->cart->get_total()); 
+
+
 echo '<div class="pi-payment-item">';
-echo '<p><strong>قيمة الطلب: <span id="pi-payment-value">' . esc_html($total) . '</span></strong>';
-echo ' <button type="button" class="copy-btn" data-copy-target="pi-payment-value">نسخ القيمة</button></p>';
+echo '<p>
+        <strong>الاجمالي :</strong>
+        <span id="pi-payment-value" class="order-value">' . esc_html($total) . '</span>
+        <button type="button" class="copy-btn" data-copy-target="pi-payment-value">
+          <i class="fas fa-copy"></i>
+          <span class="copy-feedback"></span>
+        </button>
+      </p>';
 echo '</div>';
 
-// إخفاء العنوان مع جعله قابلاً للنسخ (نسخ النص الكامل)
 echo '<div class="pi-payment-item">';
-echo '<p><strong>عنوان المول: <span id="pi-payment-address" style="display:none;">' . esc_html($this->pi_address) . '</span></strong>';
-echo ' <button type="button" class="copy-btn" data-copy-target="pi-payment-address">نسخ العنوان</button></p>';
+echo '<p>
+        <strong>عنوان المول:</strong>
+        <span id="pi-payment-address" style="display:none;">' . esc_html($this->pi_address) . '</span>
+        <button type="button" class="copy-btn" data-copy-target="pi-payment-address">
+          <i class="fas fa-copy"></i>
+          <span class="copy-feedback"></span>
+        </button>
+      </p>';
 echo '</div>';
 
-   echo '<label for="pi_transaction_hash" style="color: #6f42c1;">أدخل هاش المعاملة:</label>';
-echo '<input type="text" id="pi_transaction_hash" name="pi_transaction_hash" class="input-text" required />';
-echo '</div>';
+
+
+
+
+echo '<label for="pi_transaction_hash" style="color: #6f42c1;">أدخل هاش المعاملة:</label>';
+echo '<input type="text" id="pi_transaction_hash" name="pi_transaction_hash" class="input-text" placeholder="Transaction" required />';
 
 
 // تعديل عرض علامة الاستفهام وأيقونة GitHub
@@ -155,61 +172,87 @@ echo '</a>';
 echo '</div>';
 
 
-// وضع "انظر كيف يتم الدفع" في سطر منفصل
-echo '<div class="payment-help">';
-echo '<span class="help-text" id="video-help">انظر كيف يتم الدفع</span>';
-echo '</div>';
-
     // تضمين السكربت مباشرة في الـ payment fields
     ?>
    
    <script>
-    function copyText(text, message) {
+    function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
         var tempInput = document.createElement("input");
-        tempInput.setAttribute("type", "text");
-        tempInput.setAttribute("value", text);
+        tempInput.value = text;
         document.body.appendChild(tempInput);
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
-
-        // إظهار رسالة نجاح النسخ باستخدام SweetAlert
-        Swal.fire({
-            title: "تم النسخ بنجاح",
-            text: message,
-            icon: "success",
-            confirmButtonText: "موافق"
-        });
+        return Promise.resolve();
     }
+}
 
-    jQuery(document).ready(function($) {
-        // استخدام jQuery لضمان التفاعل الصحيح
-        $(document).on('click', '.copy-btn', function() {
-            var targetId = $(this).data('copy-target');
-            var element = $('#' + targetId);
+jQuery(document).ready(function($) {
+    console.log("jQuery is loaded, and copy script is ready.");
+    
+    $(document).on('click', '.copy-btn', function() {
+        console.log("Copy button clicked.");
+        var targetId = $(this).data('copy-target');
+        console.log("Target ID: ", targetId);
+        var element = $('#' + targetId);
+        var $btn = $(this);
 
-            if (element.length) {
-                var value = element.text().trim();
-                var message = ""; // الرسالة المخصصة
-
-                if (targetId === 'pi-payment-value') {
-                    // نسخ الرقم فقط عند الضغط على زر "نسخ القيمة"
-                    value = value.replace(/[^\d.-]/g, ''); // الحفاظ على الأرقام والفواصل العشرية
-                    message = "تم نسخ قيمة الدفع إلى الحافظة بنجاح!";
-                } else if (targetId === 'pi-payment-address') {
-                    // نسخ العنوان
-                    message = "تم نسخ عنوان الدفع إلى الحافظة بنجاح!";
-                }
-
-                copyText(value, message); // نسخ النص مع الرسالة المخصصة
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'خطأ',
-                    text: 'لم يتم العثور على العنصر المستهدف للنسخ.',
-                });
+        if (element.length) {
+            var value = element.text().trim();
+            var message = "";
+            if (targetId === 'pi-payment-value') {
+                value = value.replace(/[^\d.-]/g, '');
+                message = "تم نسخ قيمة الدفع إلى الحافظة بنجاح!";
+            } else if (targetId === 'pi-payment-address') {
+                message = "تم نسخ عنوان الدفع إلى الحافظة بنجاح!";
             }
-        });
+            console.log("Value to copy: ", value);
+            
+            copyText(value)
+            .then(function() {
+                console.log("Copy succeeded.");
+                var $feedback = $btn.find('.copy-feedback');
+                $feedback.text(message).css({'opacity':'1','display':'block'});
+                setTimeout(function() {
+                    $feedback.fadeOut(300, function() {
+                        $(this).text('').css({'opacity':'0'});
+                    });
+                }, 2000);
+            })
+            .catch(function(err) {
+                console.error("Copy failed:", err);
+                var $feedback = $btn.find('.copy-feedback');
+                $feedback.text("فشل النسخ.").css({'opacity':'1','display':'block'});
+                setTimeout(function() {
+                    $feedback.fadeOut(300, function() {
+                        $(this).text('').css({'opacity':'0'});
+                    });
+                }, 2000);
+            });
+            
+            // تغيير الأيقونة مؤقتاً من fa-copy إلى fa-check
+            $btn.find('i').removeClass('fa-copy').addClass('fa-check');
+            setTimeout(function(){
+                $btn.find('i').removeClass('fa-check').addClass('fa-copy');
+            }, 1500);
+        } else {
+            console.log("Target element not found for copying.");
+            var $feedback = $btn.find('.copy-feedback');
+            $feedback.text("لم يتم العثور على العنصر المستهدف للنسخ.").css({'opacity':'1','display':'block'});
+            setTimeout(function() {
+                $feedback.fadeOut(300, function() {
+                    $(this).text('').css({'opacity':'0'});
+                });
+            }, 2000);
+        }
+    });
+
+
+
+
 
 
     $('#pi-instructions-btn').on('click', function() {
@@ -273,13 +316,13 @@ $('form.checkout').on('submit', function(e) {
                     if (response.result !== 'error') {
                         window.location.href = response.redirect;
                     }
-                }, 3000);
+                }, 6000);
             },
             error: function() {
                 setTimeout(() => {
                     Swal.close(); // ✅ إغلاق النافذة بعد 3 ثوانٍ حتى لو كان هناك خطأ
                     isSwalOpen = false;
-                }, 3000);
+                }, 1000);
             }
         });
 
@@ -288,20 +331,18 @@ $('form.checkout').on('submit', function(e) {
 });
 
 
+    
 
 
-// عند الضغط على علامة الاستفهام، أظهر النص المخفي
-        $('.tooltip-icon').on('click', function() {
-Swal.fire({
-title: 'معلومات عن البوابة',
-text: 'هذه البوابة آمنة وسهلة، مطورة من Salla Developer، الإصدار V1.3، ومتصلة بـ Pi Blockchain API.',
-icon: 'info',
-confirmButtonText: 'إغلاق'
-});
-});
 
-        // عند الضغط على النص "انظر كيف يتم الدفع"
-        $('#video-help').on('click', function() {
+$('.tooltip-icon').on('click', function() {
+    Swal.fire({         title: 'معلومات عن البوابة',         text: 'هذه البوابة آمنة وسهلة، مطورة من Salla Developer، الإصدار V1.4، ومتصلة بـ Pi Blockchain API.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'شرح الدفع',
+        cancelButtonText: 'إغلاق'
+    }).then((result) => {
+        if (result.isConfirmed) {
             Swal.fire({
                 title: 'كيف يتم الدفع',
                 html: '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">' +
@@ -311,7 +352,10 @@ confirmButtonText: 'إغلاق'
                 showCloseButton: true,
                 showConfirmButton: false,
             });
-        });
+        }
+    });
+});
+
     });
 </script>
 
@@ -323,139 +367,134 @@ confirmButtonText: 'إغلاق'
 
 
    public function process_payment($order_id) {
-$order = wc_get_order($order_id);
-$transaction_hash = sanitize_text_field($_POST['pi_transaction_hash']);
+    $order = wc_get_order($order_id);
+    $transaction_hash = sanitize_text_field($_POST['pi_transaction_hash']);
 
-// التحقق من صحة الهاش
-if (empty($transaction_hash) || !preg_match('/^[a-f0-9]{64}$/', $transaction_hash)) {
-wc_add_notice('هاش المعاملة غير صالح. تأكد من إدخال البيانات بشكل صحيح.', 'error');
-return;
-}
+    // التحقق من صحة الهاش
+    if (empty($transaction_hash) || !preg_match('/^[a-f0-9]{64}$/', $transaction_hash)) {
+        wc_add_notice('هاش المعاملة غير صالح. تأكد من إدخال الهاش بشكل صحيح.', 'error');
+        return array('result' => 'error'); // إرجاع false لإيقاف العملية
+    }
 
-// التحقق من عدم استخدام الهاش مسبقًا
-$args = array(
-'meta_key' => '_pi_transaction_hash',
-'meta_value' => $transaction_hash,
-'post_type' => 'shop_order',
-'post_status' => array('wc-completed', 'wc-processing', 'wc-on-hold'),
-'posts_per_page' => -1,
-);
-$query = new WP_Query($args);
+    // التحقق من عدم استخدام الهاش مسبقًا
+    $args = array(
+        'meta_key'    => '_pi_transaction_hash',
+        'meta_value'  => $transaction_hash,
+        'post_type'   => 'shop_order',
+        'post_status' => array('wc-completed', 'wc-processing', 'wc-on-hold'),
+        'posts_per_page' => -1,
+    );
+    $query = new WP_Query($args);
 
-if ($query->have_posts()) {
-wc_add_notice('تم استخدام هذا الهاش في طلب سابق. يرجى استخدام هاش الدفع الجديد.', 'error');
-return;
-}
+    if ($query->have_posts()) {
+        wc_add_notice('تم استخدام هذا الهاش في طلب سابق. يرجى استخدام هاش الدفع الجديد.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
-// حفظ الهاش في الطلب
-$order->update_meta_data('_pi_transaction_hash', $transaction_hash);
-$order->save();
+    // حفظ الهاش في الطلب
+    $order->update_meta_data('_pi_transaction_hash', $transaction_hash);
+    $order->save();
 
-// بناء رابط التحقق باستخدام الهاش
-$url = "https://api.mainnet.minepi.com/transactions/$transaction_hash";
-$response = wp_remote_get($url);
+    // بناء رابط التحقق باستخدام الهاش
+    $url = "https://api.mainnet.minepi.com/transactions/$transaction_hash";
+    $response = wp_remote_get($url);
 
-if (is_wp_error($response)) {
-wc_add_notice('خطأ في التحقق من الدفع. حاول مرة أخرى.', 'error');
-return;
-}
+    if (is_wp_error($response)) {
+        wc_add_notice('خطأ في التحقق من الدفع. حاول مرة أخرى.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
-$transaction_data = json_decode(wp_remote_retrieve_body($response), true);
+    $transaction_data = json_decode(wp_remote_retrieve_body($response), true);
 
-// التحقق من أن المعاملة صحيحة
-if (empty($transaction_data) || !isset($transaction_data['hash'])) {
-wc_add_notice('فشل الاتصال بخادم Pi Network. حاول مرة أخرى.', 'error');
-return;
-}
+    // التحقق من أن المعاملة صحيحة
+    if (empty($transaction_data) || !isset($transaction_data['hash'])) {
+        wc_add_notice('فشل الاتصال بخادم Pi Network. حاول مرة أخرى ولا تستخدم PI TEST.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
-if ($transaction_data['hash'] !== $transaction_hash) {
-wc_add_notice('هاش المعاملة لا يتطابق مع المدخل.', 'error');
-return;
-}
+    if ($transaction_data['hash'] !== $transaction_hash) {
+        wc_add_notice('هاش المعاملة لا يتطابق مع المدخل.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
-if ($transaction_data['successful'] !== true) {
-wc_add_notice('المعاملة غير ناجحة.', 'error');
-return;
-}
+    if ($transaction_data['successful'] !== true) {
+        wc_add_notice('المعاملة غير ناجحة.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
+    // التحقق من المدفوعات الموجهة للعنوان
+    $payments_url = "https://api.mainnet.minepi.com/accounts/{$this->pi_address}/payments?order=desc&include_failed=false";
+    $response = wp_remote_get($payments_url);
 
-// التحقق من المدفوعات الموجهة للعنوان
-$payments_url = "https://api.mainnet.minepi.com/accounts/{$this->pi_address}/payments?order=desc&include_failed=false";
-$response = wp_remote_get($payments_url);
+    if (is_wp_error($response)) {
+        wc_add_notice('خطأ في الاتصال بخادم التحقق.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
-if (is_wp_error($response)) {
-wc_add_notice('خطأ في الاتصال بخادم التحقق.', 'error');
-return;
-}
+    $payments_data = json_decode(wp_remote_retrieve_body($response), true);
 
-$payments_data = json_decode(wp_remote_retrieve_body($response), true);
+    if (empty($payments_data['_embedded']['records'])) {
+        wc_add_notice('لا توجد مدفوعات مسجلة لهذا العنوان.', 'error');
+        return array('result' => 'error');// إرجاع false لإيقاف العملية
+    }
 
-if (empty($payments_data['_embedded']['records'])) {
-wc_add_notice('لا توجد مدفوعات مسجلة لهذا العنوان.', 'error');
-return;
-}
+    // البحث عن المعاملة في قائمة المدفوعات
+    $transaction_found = false;
+    foreach ($payments_data['_embedded']['records'] as $payment) {
+        if ($payment['transaction_hash'] === $transaction_hash) {
+            $transaction_found = true;
 
-// البحث عن المعاملة في قائمة المدفوعات
-$transaction_found = false;
-foreach ($payments_data['_embedded']['records'] as $payment) {
-if ($payment['transaction_hash'] === $transaction_hash) {
-$transaction_found = true;
+            if ($payment['to'] !== $this->pi_address) {
+                wc_add_notice('المعاملة غير موجهة لعنوان المول.', 'error');
+                return array('result' => 'error'); // إرجاع false لإيقاف العملية
+            }
 
-if ($payment['to'] !== $this->pi_address) {
-wc_add_notice('المعاملة غير موجهة لعنوان المول.', 'error');
-return;
-}
+            // جلب المبالغ
+            $expected_amount = floatval($order->get_total());
+            $actual_amount   = floatval($payment['amount']);
 
-// جلب المبالغ
-$expected_amount = floatval($order->get_total());
-$actual_amount = floatval($payment['amount']);
+            // حساب هامش التفاوت
+            $max_acceptable_difference = $expected_amount * 0.05; // 5٪
+            $low_acceptable_difference = $expected_amount * 0.02; // 2٪
 
-// حساب هامش التفاوت
-$max_acceptable_difference = $expected_amount * 0.05; // 5٪
-$low_acceptable_difference = $expected_amount * 0.02; // 2٪
+            // التحقق من الفرق بين المبلغين
+            $difference = $expected_amount - $actual_amount;
 
-// التحقق من الفرق بين المبلغين
-$difference = $expected_amount - $actual_amount;
+            if ($difference <= $low_acceptable_difference) {
+                $order->update_status('processing');
+                $order->add_order_note('تم تأكيد الدفع.<br>هاش المعاملة: ' . $transaction_hash);
+            } elseif ($difference > $low_acceptable_difference && $difference <= $max_acceptable_difference) {
+                $order->update_status('price-diff');
+                $order->add_order_note('تم استلام دفعة أقل بقليل من المطلوب (' . number_format($actual_amount, 2) . ' Pi). يرجى مراجعة الإدارة.');
+            } else {
+                // إذا كان الفرق أكبر من 5٪ → وضع الطلب في حالة "قيد الانتظار" بدلاً من الرفض
+                $order->update_status('on-hold');
+                $order->add_order_note('قيمة الدفع أقل بنسبة كبيرة من قيمة الطلب الحالي. راسل الدعم لدفع الفرق أو طلب استرداد.');
 
-if ($difference <= $low_acceptable_difference) {
-$order->update_status('processing');
-$order->add_order_note('تم تأكيد الدفع.<br>هاش المعاملة: ' . $transaction_hash);
-} elseif ($difference > $low_acceptable_difference && $difference <= $max_acceptable_difference) {
-$order->update_status('price-diff');
-$order->add_order_note('تم استلام دفعة أقل بقليل من المطلوب (' . number_format($actual_amount, 2) . ' Pi). يرجى مراجعة الإدارة.');
-} else {
-// إذا كان الفرق أكبر من 5٪ → وضع الطلب في حالة "قيد الانتظار" بدلاً من الرفض
-$order->update_status('on-hold');
-$order->add_order_note('قيمة الدفع أقل بنسبة كبيرة من قيمة الطلب الحالي. راسل الدعم لدفع الفرق أو طلب استرداد.');
+                // إرسال بريد إلكتروني للعميل
+                $customer_email = $order->get_billing_email();
+                $subject = "إشعار: دفعة غير مكتملة لطلبك #" . $order->get_id();
+                $message = "عزيزي العميل،\n\nلقد تم استلام دفعة لطلبك ولكن المبلغ المدفوع أقل من المطلوب بنسبة كبيرة. يرجى التواصل مع الدعم لدفع الفرق أو طلب استرداد.\n\nهاش المعاملة: " . $transaction_hash . "\n\nشكراً لتعاملك معنا.";
+                wp_mail($customer_email, $subject, $message);
 
-// إرسال بريد إلكتروني للعميل
-$customer_email = $order->get_billing_email();
-$subject = "إشعار: دفعة غير مكتملة لطلبك #" . $order->get_id();
-$message = "عزيزي العميل،\n\nلقد تم استلام دفعة لطلبك ولكن المبلغ المدفوع أقل من المطلوب بنسبة كبيرة. يرجى التواصل مع الدعم لدفع الفرق أو طلب استرداد.\n\nهاش المعاملة: " . $transaction_hash . "\n\nشكراً لتعاملك معنا.";
-wp_mail($customer_email, $subject, $message);
+                return array(
+                    'result'   => 'success',
+                    'redirect' => $this->get_return_url($order)
+                );
+            }
+            break;
+        }
+    }
 
+    if (!$transaction_found) {
+        wc_add_notice('لم يتم العثور على المعاملة في سجلات العنوان.', 'error');
+        return array('result' => 'error'); // إرجاع false لإيقاف العملية
+    }
 
-return array(
-'result' => 'success',
-'redirect' => $this->get_return_url($order)
-);
-
-return;
-}
-
-break;
-}
-}
-
-if (!$transaction_found) {
-wc_add_notice('لم يتم العثور على المعاملة في سجلات العنوان.', 'error');
-return;
-}
-
-return array(
-'result' => 'success',
-'redirect' => $this->get_return_url($order)
-);
+    return array(
+        'result'   => 'success',
+        'redirect' => $this->get_return_url($order)
+    );
 }
         private function validate_transaction($transaction_data, $transaction_hash, $order) {
     $expected_address = $this->get_option('pi_address');
@@ -498,7 +537,10 @@ function update_order_status_to_refunded($order_id, $refund_id) {
     if ($order->get_status() !== 'refunded') {
         $order->update_status('refunded', 'تم استرداد المبلغ بالكامل للعميل.');
     }
-}// إرسال إشعار عند تغيير حالة الطلب أو إضافة ملاحظة
+}
+
+
+// إرسال إشعار عند تغيير حالة الطلب أو إضافة ملاحظة
 add_action('woocommerce_order_status_changed', 'send_order_notification_to_telegram', 10, 4);
 add_action('woocommerce_order_note_added', 'send_order_note_notification_to_telegram', 10, 2);
 
@@ -600,3 +642,4 @@ function send_order_note_notification_to_telegram($order_id, $note_id) {
         error_log("فشل إرسال إشعار الملاحظة للطلب #" . $order_id);
     }
 }
+
