@@ -1,6 +1,6 @@
 .pi-payment-container {
     padding: 25px;
-    border: 1px solid #e0e0e0;
+    border: 2px solid #e0e0e0;
     border-radius: 12px;
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -25,11 +25,9 @@ label[for="pi_transaction_hash"] {
     background-color: #e9ecef;
 }
 
-.pi-payment-item p {
-    font-size: 1.1em;
+.pi-payment-item strong {
+    font-size: 0.95em;
     color: #333;
-    margin: 0 0 10px 0;
-    font-weight: 500;
 }
 
 .woocommerce-checkout .payment_method_pi_payment > label {
@@ -37,27 +35,73 @@ label[for="pi_transaction_hash"] {
     color: #6f42c1;
 }
 
-.pi-payment-item button {
-    background-color: #6f42c1;
-    color: white;
-    padding: 10px 20px;
+.pi-payment-item p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    justify-content: space-between;
+}
+
+.order-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-grow: 1;
+}
+
+.copy-btn {
+    position: relative;
+    background: transparent;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 100%;
+    padding: 2px;
+    color: #6f42c1;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    flex-shrink: 0;
+    margin-left: 8px;
 }
 
-.pi-payment-item button:hover {
-    background-color: #b09c21;
-    transform: translateY(2px);
-    color: white;
+.copy-btn:hover {
+    color: #28a745;
+    transform: scale(1.1);
 }
 
-.pi-payment-item button:active {
-    transform: translateY(0);
+.copy-feedback {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #6f42c1;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+}
+
+@media (max-width: 350px) {
+    .pi-payment-item p {
+        flex-wrap: wrap;
+    }
+    
+    .copy-btn {
+        align-self: flex-end;
+        margin-left: 0;
+        margin-top: 5px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -68,33 +112,6 @@ label[for="pi_transaction_hash"] {
     .pi-payment-item {
         padding: 10px;
     }
-
-    .pi-payment-item button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-
-/* تعديل نص المساعدة */
-.help-text {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    margin-left: 10px;
-    display: block;
-    margin-top: 15px; /* هبوط النص قليلاً لأسفل */
-}
-
-.help-text:hover {
-    color: #0056b3;
-}
-
-/* تحسين مظهر الحاوية */
-.pi-payment-container .pi-payment-item p strong {
-    font-weight: bold;
 }
 
 
@@ -109,11 +126,8 @@ label[for="pi_transaction_hash"] {
     }
 }
 
-
-
-/* تحسين مظهر قسم "انظر كيف يتم الدفع" */
 .payment-help {
-    margin-top: 5px; /* زيادة المسافة عن الأيقونات */
+    margin-top: 5px;
     font-weight: bold;
     display: block;
 }
@@ -121,7 +135,7 @@ label[for="pi_transaction_hash"] {
 .tooltip-container {
     display: flex;
     align-items: center;
-    gap: 10px; /* مسافة بين الأيقونات */
+    gap: 10px;
     position: relative;
 }
 
@@ -129,7 +143,7 @@ label[for="pi_transaction_hash"] {
     font-size: 25px;
     color: #007bff;
     cursor: pointer;
-margin-top: 5px;
+    margin-top: 5px;
 }
 
 .tooltip-container:hover .tooltip-text {
@@ -161,16 +175,14 @@ margin-top: 5px;
     font-size: 24px;
     color: #333;
     transition: color 0.3s ease-in-out, transform 0.2s;
-margin-top: 5px;
-    
+    margin-top: 10px;
+margin-left: 10px;
 }
 
 .github-icon:hover {
     color: #000;
     transform: scale(1.2);
 }
-
-  
 
 #pi-instructions-btn {
     background-color: transparent;
@@ -186,7 +198,7 @@ margin-top: 5px;
     font-weight: bold;
     margin-bottom: 5px;
     margin-top: -5px;
-    width: auto; 
+    width: auto;
     white-space: nowrap;
 }
 
@@ -200,7 +212,6 @@ margin-top: 5px;
     height: 38px;
     object-fit: contain;
 }
-
 
 .pi-instructions-popup {
     max-width: 400px;
