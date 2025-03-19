@@ -1,5 +1,5 @@
 .pi-payment-container {
-    padding: 25px;
+    padding: 15px;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
     background-color: #ffffff;
@@ -11,6 +11,7 @@
 label[for="pi_transaction_hash"] {
     color: #6f42c1;
     font-weight: bold;
+    padding-bottom: 6px;
 }
 
 .pi-payment-item {
@@ -19,6 +20,7 @@ label[for="pi_transaction_hash"] {
     border-radius: 8px;
     background-color: #f8f9fa;
     transition: background-color 0.3s ease;
+box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 .pi-payment-item:hover {
@@ -38,19 +40,25 @@ label[for="pi_transaction_hash"] {
 .pi-payment-item p {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
+    /* نستخدم nowrap للحفاظ على النص والأيقونة في صف واحد */
     flex-wrap: nowrap;
+    position: relative;
     overflow: hidden;
     white-space: nowrap;
     max-width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .order-value {
+    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     flex-grow: 1;
+    order: 0;
+    font-weight: 600;
+    color: #6f42c1;
 }
 
 .copy-btn {
@@ -66,7 +74,20 @@ label[for="pi_transaction_hash"] {
     justify-content: center;
     font-size: 1.3em;
     flex-shrink: 0;
-    margin-left: 8px;
+    order: 1;
+    margin-left: 8px; /* يضع الأيقونة على اليسار بجانب الرقم */
+    /* التأكيد على محاذاة الأيقونة في منتصف السطر */
+    align-self: center;
+}
+
+.copy-btn i.fa-check {
+    color: green !important;
+}
+
+
+.copy-btn span,
+.copy-btn i {
+    color: #6f42c1 !important;
 }
 
 .copy-btn:hover {
@@ -76,9 +97,8 @@ label[for="pi_transaction_hash"] {
 
 .copy-feedback {
     position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: -35px;
+    left: 0;
     background-color: #6f42c1;
     color: #fff;
     padding: 4px 8px;
@@ -94,13 +114,17 @@ label[for="pi_transaction_hash"] {
 
 @media (max-width: 350px) {
     .pi-payment-item p {
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .order-value {
+        max-width: 100%;
     }
     
     .copy-btn {
-        align-self: flex-end;
+        align-self: flex-start;
         margin-left: 0;
-        margin-top: 5px;
     }
 }
 
@@ -108,13 +132,11 @@ label[for="pi_transaction_hash"] {
     .pi-payment-container {
         padding: 15px;
     }
-
+    
     .pi-payment-item {
         padding: 10px;
     }
 }
-
-
 
 @media (min-width: 601px) {
     .pi-payment-container input#pi_transaction_hash {
@@ -122,7 +144,19 @@ label[for="pi_transaction_hash"] {
         padding: 12px;
         font-size: 16px;
         border-radius: 6px;
-        border: 1px solid #ccc;
+        border: 1px solid #6f42c1;
+    }
+    
+    /* الإبقاء على النص والأيقونة في صف واحد دون التفاف */
+    .pi-payment-item p {
+        flex-wrap: nowrap;
+    }
+    
+    .copy-btn {
+        order: 0;
+        margin-top: 0;
+        margin-left: 8px;
+        align-self: center;
     }
 }
 
@@ -173,10 +207,10 @@ label[for="pi_transaction_hash"] {
 
 .github-icon {
     font-size: 24px;
-    color: #333;
+    color: #373733;
     transition: color 0.3s ease-in-out, transform 0.2s;
     margin-top: 10px;
-margin-left: 10px;
+    margin-left: 10px;
 }
 
 .github-icon:hover {
@@ -197,7 +231,7 @@ margin-left: 10px;
     transition: color 0.3s ease, transform 0.2s ease;
     font-weight: bold;
     margin-bottom: 5px;
-    margin-top: -5px;
+    margin-top: -10px;
     width: auto;
     white-space: nowrap;
 }
@@ -249,3 +283,21 @@ margin-left: 10px;
     top: 10px;
     right: 10px;
 }
+
+#pi_transaction_hash {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 0px solid #ccc;
+    background-color: #F3E5F5;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.15);
+    
+}
+
+#pi_transaction_hash:hover {
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.25);
+    outline: none;
+    border: 2px solid #6a1b9a;
+}
+
