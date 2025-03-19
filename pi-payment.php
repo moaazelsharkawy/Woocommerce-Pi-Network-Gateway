@@ -1,4 +1,5 @@
 
+
 <?php
 /*
 Plugin Name: WooCommerce Pi Network Gateway
@@ -131,6 +132,7 @@ echo '<button type="button" id="pi-instructions-btn" class="pi-instructions-btn"
 $total = strip_tags(WC()->cart->get_total()); 
 
 
+
 echo '<div class="pi-payment-item">';
 echo '<p>
         <strong>الاجمالي :</strong>
@@ -145,19 +147,16 @@ echo '</div>';
 echo '<div class="pi-payment-item">';
 echo '<p>
         <strong>عنوان المول:</strong>
-        <span id="pi-payment-address" style="display:none;">' . esc_html($this->pi_address) . '</span>
-        <button type="button" class="copy-btn" data-copy-target="pi-payment-address">
+        <span id="pi-payment-address">' . esc_html(substr($this->pi_address, 0, 4)) . '</span>
+        <span id="pi-payment-address-full" style="display: none;">' . esc_html($this->pi_address) . '</span>
+        <button type="button" class="copy-btn" data-copy-target="pi-payment-address-full">
           <i class="fas fa-copy"></i>
           <span class="copy-feedback"></span>
         </button>
       </p>';
 echo '</div>';
 
-
-
-
-
-echo '<label for="pi_transaction_hash" style="color: #6f42c1;">أدخل هاش المعاملة:</label>';
+echo '<label for="pi_transaction_hash" style="color: #000;">أدخل هاش المعاملة:</label>';
 echo '<input type="text" id="pi_transaction_hash" name="pi_transaction_hash" class="input-text" placeholder="Transaction" required />';
 
 
@@ -176,80 +175,68 @@ echo '</div>';
     ?>
    
    <script>
-    function copyText(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-        return navigator.clipboard.writeText(text);
-    } else {
-        var tempInput = document.createElement("input");
-        tempInput.value = text;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        return Promise.resolve();
-    }
+    
+function copyText(text) {
+if (navigator.clipboard && window.isSecureContext) {
+return navigator.clipboard.writeText(text);
+} else {
+var tempInput = document.createElement("input");
+tempInput.value = text;
+document.body.appendChild(tempInput);
+tempInput.select();
+document.execCommand("copy");
+document.body.removeChild(tempInput);
+return Promise.resolve();
+}
 }
 
 jQuery(document).ready(function($) {
-    console.log("jQuery is loaded, and copy script is ready.");
-    
-    $(document).on('click', '.copy-btn', function() {
-        console.log("Copy button clicked.");
-        var targetId = $(this).data('copy-target');
-        console.log("Target ID: ", targetId);
-        var element = $('#' + targetId);
-        var $btn = $(this);
+$(document).on('click', '.copy-btn', function() {
+var targetId = $(this).data('copy-target'); // الحصول على الـ ID للعنصر المستهدف
+var element = $('#' + targetId); // البحث عن العنصر باستخدام الـ ID
+var $btn = $(this); // حفظ الزر الذي تم النقر عليه
 
-        if (element.length) {
-            var value = element.text().trim();
-            var message = "";
-            if (targetId === 'pi-payment-value') {
-                value = value.replace(/[^\d.-]/g, '');
-                message = "تم نسخ قيمة الدفع إلى الحافظة بنجاح!";
-            } else if (targetId === 'pi-payment-address') {
-                message = "تم نسخ عنوان الدفع إلى الحافظة بنجاح!";
-            }
-            console.log("Value to copy: ", value);
-            
-            copyText(value)
-            .then(function() {
-                console.log("Copy succeeded.");
-                var $feedback = $btn.find('.copy-feedback');
-                $feedback.text(message).css({'opacity':'1','display':'block'});
-                setTimeout(function() {
-                    $feedback.fadeOut(300, function() {
-                        $(this).text('').css({'opacity':'0'});
-                    });
-                }, 2000);
-            })
-            .catch(function(err) {
-                console.error("Copy failed:", err);
-                var $feedback = $btn.find('.copy-feedback');
-                $feedback.text("فشل النسخ.").css({'opacity':'1','display':'block'});
-                setTimeout(function() {
-                    $feedback.fadeOut(300, function() {
-                        $(this).text('').css({'opacity':'0'});
-                    });
-                }, 2000);
-            });
-            
-            // تغيير الأيقونة مؤقتاً من fa-copy إلى fa-check
-            $btn.find('i').removeClass('fa-copy').addClass('fa-check');
-            setTimeout(function(){
-                $btn.find('i').removeClass('fa-check').addClass('fa-copy');
-            }, 1500);
-        } else {
-            console.log("Target element not found for copying.");
-            var $feedback = $btn.find('.copy-feedback');
-            $feedback.text("لم يتم العثور على العنصر المستهدف للنسخ.").css({'opacity':'1','display':'block'});
-            setTimeout(function() {
-                $feedback.fadeOut(300, function() {
-                    $(this).text('').css({'opacity':'0'});
-                });
-            }, 2000);
-        }
-    });
+if (element.length) {
+var value = element.text().trim();
 
+// التحقق مما إذا كان العنصر المستهدف هو "pi-payment-value" لإزالة الرموز
+if (targetId === "pi-payment-value") {
+value = value.replace(/[^0-9.]/g, ''); // الاحتفاظ بالأرقام والفاصلة العشرية فقط
+}
+
+var message = "تم النسخ بنجاح!";
+
+copyText(value)
+.then(function() {
+console.log("Copy succeeded.");
+var $feedback = $btn.find('.copy-feedback');
+$feedback.text(message).css({'opacity':'1','display':'block'});
+setTimeout(function() {
+$feedback.fadeOut(300, function() {
+$(this).text('').css({'opacity':'0'});
+});
+}, 2000);
+})
+.catch(function(err) {
+console.error("Copy failed:", err);
+var $feedback = $btn.find('.copy-feedback');
+$feedback.text("فشل النسخ.").css({'opacity':'1','display':'block'});
+setTimeout(function() {
+$feedback.fadeOut(300, function() {
+$(this).text('').css({'opacity':'0'});
+});
+}, 2000);
+});
+
+// تغيير الأيقونة مؤقتاً من fa-copy إلى fa-check
+$btn.find('i').removeClass('fa-copy').addClass('fa-check');
+setTimeout(function(){
+$btn.find('i').removeClass('fa-check').addClass('fa-copy');
+}, 1500);
+} else {
+console.log("Target element not found for copying.");
+}
+});
 
 
 
@@ -283,6 +270,9 @@ jQuery(document).ready(function($) {
     });
 });
 
+
+
+
 let isSwalOpen = false; // متغير لتتبع حالة نافذة SweetAlert
 
 $('form.checkout').on('submit', function(e) {
@@ -292,43 +282,37 @@ $('form.checkout').on('submit', function(e) {
         }
         isSwalOpen = true; // تعيين حالة النافذة إلى "مفتوحة"
 
-        // ✅ إظهار نافذة التحميل فقط
+        // إظهار نافذة التحميل مع أيقونة الإغلاق وعدم الإغلاق التلقائي
         Swal.fire({
-            title: 'جاري التحقق من الدفع',
-            text: 'يرجى الانتظار جاري التحقق من الدفع مع Pi Blockchain...',
-            icon: 'info',
+            title: 'التحقق من الدفع',
+            html: ' يرجى الانتظار، جاري التحقق من الدفع مع Pi Blockchain...  <i class="fa-solid fa-triangle-exclamation" style="color: #FFA500; font-size: 20px;"></i> لا تغلق النافذة إلا في حال ظهور خطأ.',
+    icon: 'warning',
             showConfirmButton: false,
+            showCloseButton: true, // عرض أيقونة الإغلاق
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
             }
         });
-
         $.ajax({
             url: wc_checkout_params.ajax_url,
             type: 'POST',
             data: $('form.checkout').serialize(),
             success: function(response) {
-                setTimeout(() => {
-                    Swal.close(); // ✅ إغلاق النافذة بعد 3 ثوانٍ فقط
-                    isSwalOpen = false;
-
-                    if (response.result !== 'error') {
-                        window.location.href = response.redirect;
-                    }
-                }, 6000);
+                isSwalOpen = false;
+                if (response.result !== 'error') {
+                    window.location.href = response.redirect;
+                }
             },
             error: function() {
-                setTimeout(() => {
-                    Swal.close(); // ✅ إغلاق النافذة بعد 3 ثوانٍ حتى لو كان هناك خطأ
-                    isSwalOpen = false;
-                }, 1000);
+                isSwalOpen = false;
             }
         });
 
         return false; // منع إعادة تحميل الصفحة
     }
 });
+
 
 
     
@@ -346,8 +330,9 @@ $('.tooltip-icon').on('click', function() {
             Swal.fire({
                 title: 'كيف يتم الدفع',
                 html: '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">' +
-                      '<iframe src="https://www.youtube.com/embed/NZ9uLrEdoPA" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>' +
-                      '</div>',
+      '<iframe src="https://www.youtube.com/embed/pcEc-27r_rI" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>' +
+      '</div>',
+
                 width: 800,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -356,11 +341,10 @@ $('.tooltip-icon').on('click', function() {
     });
 });
 
+
     });
 </script>
 
-
-    
     <?php
 }
 
